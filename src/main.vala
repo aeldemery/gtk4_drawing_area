@@ -2,7 +2,7 @@ namespace DemoApp {
 public class DemoApp : Gtk.Application {
     public DemoApp () {
         Object (
-            application_id: "github.aeldemery.gtk4demo",
+            application_id: "github.aeldemery.gtk4_drawing_area_demo",
             flags: ApplicationFlags.FLAGS_NONE
         );
     }

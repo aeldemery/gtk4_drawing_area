@@ -1,4 +1,4 @@
-project ('github.aeldemery.gtk4demo', 'vala', 'c')
+project ('github.aeldemery.gtk4_drawing_area_demo', 'vala', 'c')
 
 sources = []
 
