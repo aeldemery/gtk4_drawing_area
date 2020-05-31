@@ -101,6 +101,7 @@ public class DemoWindow: Gtk.ApplicationWindow {
 }
 int main (string[] args) {
     var app = new DemoApp();
-    return app.run(args);
+    var result = app.run(args);
+    return result;
 }
 }
