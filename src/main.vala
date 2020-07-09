@@ -1,3 +1,8 @@
+// Copyright (c) 2020 Ahmed Eldemery
+//
+// This software is released under the MIT License.
+// https://opensource.org/licenses/MIT
+
 namespace DemoApp {
     public class DemoApp : Gtk.Application {
         public DemoApp () {
@@ -11,14 +16,11 @@ namespace DemoApp {
             // var win = new DemoWindow (this);
             // win.destroy_with_parent = true;
             // win.present ();
-            var win = this.get_active_window ();
+            var win = this.active_window;
             if (win == null) {
                 win = new DemoWindow (this);
             }
             win.present ();
-        }
-
-        protected override void open (GLib.File[] files, string hint) {
         }
     }
 
@@ -36,6 +38,9 @@ namespace DemoApp {
 
         public DemoWindow (Gtk.Application app) {
             Object (application: app);
+        }
+
+        construct {
             this.set_title ("Gtk4 Drawing Area Example");
 
             frame = new Gtk.Frame ("Drawing Area");
@@ -60,11 +65,11 @@ namespace DemoApp {
             drag = new Gtk.GestureDrag ();
             drag.set_button (Gdk.BUTTON_PRIMARY);
             drawing_area.add_controller (drag);
-            drag.drag_begin.connect ((widget, x, y) => {
+            drag.drag_begin.connect ((gesture, x, y) => {
                 start_x = x;
                 start_y = y;
 
-                draw_brush (widget, x, y);
+                draw_brush (gesture, x, y);
             });
             drag.drag_update.connect ((gesture, offset_x, offset_y) => {
                 draw_brush (gesture, start_x + offset_x, start_y + offset_y);
@@ -80,15 +85,13 @@ namespace DemoApp {
                 clear_surface ();
                 gesture.get_widget ().queue_draw ();
             });
-
-            this.show ();
         }
 
-        private void draw_brush (Gtk.GestureDrag area, double x, double y) {
+        private void draw_brush (Gtk.GestureDrag gesture, double x, double y) {
             var cr = new Cairo.Context (surface);
             cr.rectangle (x - 3, y - 3, 6, 6);
             cr.fill ();
-            area.get_widget ().queue_draw ();
+            gesture.get_widget ().queue_draw ();
         }
 
         private void init_drawing_area (Gtk.DrawingArea area) {
@@ -107,9 +110,8 @@ namespace DemoApp {
             cr.paint ();
         }
     }
-    int main (string[] args) {
+    static int main (string[] args) {
         var app = new DemoApp ();
-        var result = app.run (args);
-        return result;
+        return app.run (args);
     }
 }
