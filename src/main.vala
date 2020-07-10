@@ -50,17 +50,18 @@ namespace DemoApp {
             drawing_area.set_size_request (400, 300);
 
             frame.set_child (drawing_area);
-            // drawing_area.set_draw_func (draw_cb);
+
             drawing_area.realize.connect ((area) => {
                 init_drawing_area (area as Gtk.DrawingArea);
             });
             drawing_area.resize.connect ((area, width, height) => {
                 init_drawing_area (area);
             });
-            drawing_area.set_draw_func ((area, context, width, height) => {
-                context.set_source_surface (surface, 0, 0);
-                context.paint ();
-            });
+            // drawing_area.set_draw_func ((area, context, width, height) => {
+            // context.set_source_surface (surface, 0, 0);
+            // context.paint ();
+            // });
+            drawing_area.set_draw_func (draw_cb);
 
             drag = new Gtk.GestureDrag ();
             drag.set_button (Gdk.BUTTON_PRIMARY);
@@ -85,6 +86,11 @@ namespace DemoApp {
                 clear_surface ();
                 gesture.get_widget ().queue_draw ();
             });
+        }
+
+        static void draw_cb (Gtk.DrawingArea area, Cairo.Context context, int width, int height) {
+            context.set_source_surface (surface, 0, 0);
+            context.paint ();
         }
 
         private void draw_brush (Gtk.GestureDrag gesture, double x, double y) {
